@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Money Shooter - Sely</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Container for everything */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Instruction text */
+    .instruction {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+      font-size: 60px;
+    }
+
+    .equal-sign {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* "Sely" clickable */
+    .sely {
+      font-size: 60px;
+      font-weight: bold;
+      color: #28a745;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+      display: inline-block;
+      position: relative;
+
+    }
+    .sely:hover {
+      color: #218838;
+    }
+
+    /* Money image style */
+    .money {
+      position: absolute;
+      width: 100px;
+      height: auto;
+      animation: shoot 1.5s linear forwards;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @keyframes shoot {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(
+          calc(100px * var(--rand-x)),
+          calc(-300px * var(--rand-y))
+        );
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="instruction">Zakki Brondong Bispak</div>
+    <div class="equal-sign">=</div>
+    <div class="sely" onclick="shootMoney()" id="sely">Sawer</div>
+  </div>
+
+  <script>
+    // PNG files for money
+    const moneyImages = ["money 2.png", "money 3.png", "money 4.png"];
+    let currentIndex = 0;
+
+    function shootMoney() {
+      const sely = document.getElementById("sely");
+      const rect = sely.getBoundingClientRect();
+
+      const money = document.createElement("img");
+      money.src = moneyImages[currentIndex];
+      money.className = "money";
+
+      // Switch image index
+      currentIndex = (currentIndex + 1) % moneyImages.length;
+
+      // Spawn from center of Sely
+      money.style.left = rect.left + rect.width / 2 - 25 + "px";
+      money.style.top = rect.top + window.scrollY + "px";
+
+      // Random direction (up, down, sideways)
+      money.style.setProperty("--rand-x", Math.random() * 5 - 1);
+      money.style.setProperty("--rand-y", Math.random() * 5 - 1);
+
+      document.body.appendChild(money);
+
+      // Remove after animation
+      setTimeout(() => {
+        money.remove();
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>
+
+
+
